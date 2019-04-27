@@ -141,7 +141,7 @@ export default {
     },
     handleUsernameOrEmail(name, value, callback) {
       //自定义校验
-      console.log(value);
+      // console.log(value);
       callback();
     },
     getCaptcha() {

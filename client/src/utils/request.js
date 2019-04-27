@@ -5,15 +5,24 @@ import { getToken } from '@/utils/auth';
 // 创建 axios 实例
 const service = axios.create({
   baseURL: '/api', // api base_url
-  timeout: 30000 // 请求超时时间
-});
-service.defaults.transformRequest = [
-  function(data) {
-    console.log(data);
-  }
-];
-const err = error => {
+  timeout: 30000, // 请求超时时间
+  transformRequest: [
+    function(data) {
+      console.warn(data);
+      return JSON.stringify(data);
+    }
+  ],
+  transformResponse: [
+    function(data) {
+      // 对 data 进行任意转换处理
+      // console.warn(data);
 
+      return data;
+    }
+  ]
+});
+
+const err = error => {
   // if (error.response) {
   //   const data = error.response.data;
   //   const token = Vue.ls.get(ACCESS_TOKEN);
@@ -34,11 +43,12 @@ const err = error => {
   //     }
   //   }
   // }
-  return Promise.reject('it"s error');
+  return Promise.reject(error);
 };
 
 // request interceptor
 service.interceptors.request.use(config => {
+  config.headers['Content-Type'] = 'application/json'; // 去掉这项 需解决反斜杠问题
   if (getToken()) {
     config.headers['Access-Token'] = getToken(); // 让每个请求携带自定义 token 请根据实际情况自行修改
   }

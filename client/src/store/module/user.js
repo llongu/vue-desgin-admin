@@ -12,13 +12,11 @@ export default {
   },
   getters: {
     filtercount: state => {
-
       //相当与计算属性
       return state.shopNum + '#';
     }
   },
   mutations: {
-
     //直接变更状态 (如果这里使用异步代码会影响vue-devtools调试)
     SET_TOKEN: (state, val) => {
       state.name = val.username;
@@ -26,16 +24,15 @@ export default {
   },
   actions: {
     Login({ commit }, val) {
-      axios
-        .post(user.login)
-        .then(res => {
-          console.log(res);
-        })
-        .catch(err => {
-          console.log(err);
-        });
+      // axios
+      //   .post(user.login, val)
+      //   .then(res => {
+      //     console.log(res);
+      //   })
+      //   .catch(err => {
+      //     console.log(err);
+      //   });
       return new Promise((resolve, reject) => {
-
         // setTimeout(() => {
         //   setToken(val);
         //   commit('SET_TOKEN', val);
@@ -50,6 +47,11 @@ export default {
         //     reject(err);
         //   });
       });
+    },
+    Register({ commit }, val) {
+      console.log(commit, val);
+
+      return axios.post(user.register, val);
     }
   }
 };

@@ -1,2 +1,2 @@
-/v-manager/node_modules
-/koa-service/node_modules
+/client/node_modules
+/service/node_modules

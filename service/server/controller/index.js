@@ -9,5 +9,6 @@ const router = new Router({
  * 接口
  */
 router.post('/user/login', user.login);
+router.post('/user/register', user.register);
 
 module.exports = router;
