@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 // 创建模型
 const Schema = mongoose.Schema;
 //定义格式
-const registerModel = new Schema({
+const register = new Schema({
   email: {
     type: String,
     required: [true, 'Why no email?']
@@ -16,7 +16,7 @@ const registerModel = new Schema({
   code: String
 });
 
-const model2 = new Schema({
+const login = new Schema({
   email: {
     type: String,
     required: [true, 'Why no email?']
@@ -28,5 +28,5 @@ const model2 = new Schema({
   phone: String,
   code: String
 });
-const registerDB = mongoose.model('register', registerModel);
+const registerDB = mongoose.model('register', register);
 module.exports = registerDB;

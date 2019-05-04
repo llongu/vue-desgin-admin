@@ -1,4 +1,5 @@
-const registerDB = require('../module/mario');
+const registerMod = require('../module/user');
+const state = require('../../utils/response.config.js');
 class User {
   /**
    * 创建文章模型
@@ -15,43 +16,40 @@ class User {
   }
 
   /**
-   * 查询取文章详情数据
-   * @param id  文章ID
-   * @returns {Promise<Model>}
+   * register
+   * @param form
+   * @returns
    */
   static async register(ctx) {
-    var data = JSON.parse(JSON.stringify(ctx.request.body));
-    // log(chalk.red(data));
+    var req = JSON.parse(JSON.stringify(ctx.request.body));
+    // log(chalk.red(req));
+
     //校验
-    if (data.password !== data.password2) {
-      ctx.status = 400;
-      ctx.body = {
-        code: 400,
-        msg: '密码不一致！'
-      };
-      return ctx;
+    if (req.password !== req.password2) {
+      return state({ ctx, msg: '密码不一致', status: 2 });
     }
-    //查重
 
     try {
-      //这里入库字段和获取的参数字段不一致 需重新声明
-      let save = new registerDB({
-        email: data.email,
-        pwd: data.password,
-        phone: data.mobile,
-        code: data.captcha
+      //查重
+      let repeat = await registerMod.findOne({ email: req.email });
+
+      if (repeat) {
+        return state({ ctx, msg: '该账户已被注册！', status: 2 });
+      }
+
+      //入库 这里字段和获取的参数字段不一致 需重新声明
+      let data = new registerMod({
+        email: req.email,
+        pwd: req.password,
+        phone: req.mobile,
+        code: req.captcha
       });
-      //入库
-      const res = await save.save();
-      log(chalk.green(res));
-      return (ctx.body = {
-        code: 200,
-        msg: '注册成功'
-      });
+
+      const save = await data.save();
+      // log(chalk.green(save));
+      return state({ ctx, msg: '注册成功！' });
     } catch (error) {
-      return (ctx.body = {
-        msg: error
-      });
+      return state({ ctx, msg: error });
     }
   }
 }

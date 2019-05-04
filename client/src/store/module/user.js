@@ -19,6 +19,7 @@ export default {
   mutations: {
     //直接变更状态 (如果这里使用异步代码会影响vue-devtools调试)
     SET_TOKEN: (state, val) => {
+      console.log(val);
       state.name = val.username;
     }
   },
@@ -48,10 +49,17 @@ export default {
         //   });
       });
     },
-    Register({ commit }, val) {
-      console.log(commit, val);
-
-      return axios.post(user.register, val);
+    async Register({ commit }, { values, callback }) {
+      // console.log(commit, values);
+      try {
+        const result = await axios.post(user.register, values);
+        callback(result);
+        if (result.status == 1) {
+          commit('SET_TOKEN', 123);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };

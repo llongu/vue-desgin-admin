@@ -96,7 +96,7 @@
                   :disabled="registerBtn">注册
         </a-button>
         <router-link class="login"
-                     :to="{ name: 'login' }">使用已有账户登录</router-link>
+                     :to="{ name: 'login'}">使用已有账户登录</router-link>
       </a-form-item>
 
     </a-form>
@@ -207,26 +207,22 @@ export default {
       this.form.validateFields(async (err, values) => {
         if (!err) {
           //增加命名空间 User/Login
-          try {
-            const result = await this.$store.dispatch('User/Register', values);
-            console.warn(result);
-            if (result) {
-              // this.$router.push({ name: 'home', params: { value: 'hahah' } });
-              //   // 或
-              // this.$router.push({
-              //   path: '/',
-              //   query: { value: 'login success' }
-              // });
-              this.$notification['success']({
-                message: '注册成功',
-                description: '2秒后跳转',
-                duration: 2
-              });
+          this.$store.dispatch('User/Register', {
+            values,
+            callback: result => {
+              this.registerBtn = false;
+              if (result.status == 1) {
+                this.$notification['success']({
+                  message: result.msg || '注册成功',
+                  description: '2秒后跳转',
+                  duration: 2
+                });
+                setTimeout(() => {
+                  this.$router.push({ name: 'login' });
+                }, 2000);
+              }
             }
-          } catch (error) {
-            this.requestFailed(error);
-          }
-          // this.$router.push({ name: 'login', params: { ...values } });
+          });
         }
       });
     },
@@ -250,16 +246,6 @@ export default {
           const hide = this.$message.error('验证码发送失败,请输入1234登录', 3);
         }
       });
-    },
-    requestFailed(err) {
-      this.$notification['error']({
-        message: '错误',
-        description:
-          ((err.response || {}).data || {}).message ||
-          '请求出现错误，请稍后再试',
-        duration: 4
-      });
-      this.registerBtn = false;
     }
   },
   watch: {
@@ -269,6 +255,7 @@ export default {
   }
 };
 </script>
+
 <style lang="less">
 .user-register {
   &.error {
@@ -290,7 +277,8 @@ export default {
   }
 }
 </style>
-      <style lang="less" scoped>
+
+<style lang="less" scoped>
 .user-layout-register {
   & > h3 {
     font-size: 16px;

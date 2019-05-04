@@ -4,45 +4,61 @@ import { getToken } from '@/utils/auth';
 
 // 创建 axios 实例
 const service = axios.create({
-  baseURL: '/api', // api base_url
+  baseURL: '/api', // api base_url 开发模式动态配置
   timeout: 30000, // 请求超时时间
   transformRequest: [
     function(data) {
-      console.warn(data);
+      // console.warn(data);
       return JSON.stringify(data);
     }
   ],
   transformResponse: [
     function(data) {
       // 对 data 进行任意转换处理
-      // console.warn(data);
-
-      return data;
+      // console.warn(JSON.parse(data).status);
+      let res = data && JSON.parse(data);
+      switch (res.status) {
+        case 2:
+          notification['warning']({
+            message: '警告',
+            description: res.msg || '请求出现错误，请稍后再试',
+            duration: 3
+          });
+          break;
+        default:
+          break;
+      }
+      return res;
     }
   ]
 });
 
 const err = error => {
-  // if (error.response) {
-  //   const data = error.response.data;
-  //   const token = Vue.ls.get(ACCESS_TOKEN);
-  //   if (error.response.status === 403) {
-  //     this.$notification.error({ message: 'Forbidden', description: data.message });
-  //   }
-  //   if (error.response.status === 401) {
-  //     notification.error({
-  //       message: 'Unauthorized',
-  //       description: 'Authorization verification failed'
-  //     });
-  //     if (token) {
-  //       store.dispatch('Logout').then(() => {
-  //         setTimeout(() => {
-  //           window.location.reload();
-  //         }, 1500);
-  //       });
-  //     }
-  //   }
-  // }
+  if (!error.response) {
+    this.$notification['error']({
+      message: '错误',
+      description: 'error response null',
+      duration: 3
+    });
+  }
+  let res = error.response.data;
+  switch (res.code) {
+    case 400:
+      notification['warning']({
+        message: '警告',
+        description: res.msg || '请求出现错误，请稍后再试',
+        duration: 3
+      });
+      break;
+    default:
+      notification['error']({
+        message: '错误',
+        description: res.msg || '请求出现错误，请稍后再试',
+        duration: 3
+      });
+      break;
+  }
+
   return Promise.reject(error);
 };
 
