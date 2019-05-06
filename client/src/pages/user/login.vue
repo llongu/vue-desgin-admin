@@ -9,7 +9,7 @@
       <a-tabs :activeKey="customActiveKey"
               @change='changeActiveKey'
               :tabBarStyle="{ textAlign: 'center', borderBottom: 'unset' }">
-        <a-tab-pane key="tab1"
+        <a-tab-pane key="email"
                     tab="账号密码登录">
           <a-form-item>
             <a-input size="large"
@@ -41,7 +41,7 @@
           </a-form-item>
         </a-tab-pane>
 
-        <a-tab-pane key="tab2"
+        <a-tab-pane key="phone"
                     tab="手机号登录">
           <a-form-item>
             <a-input size="large"
@@ -121,10 +121,11 @@
 <script>
 export default {
   name: 'login',
+
   data() {
     return {
       form: this.$form.createForm(this),
-      customActiveKey: 'tab1',
+      customActiveKey: 'email',
       loginBtn: false,
       loginType: 0,
       state: {
@@ -138,58 +139,69 @@ export default {
   methods: {
     changeActiveKey(key) {
       this.customActiveKey = key;
+      this.form.resetFields();
     },
     handleUsernameOrEmail(name, value, callback) {
       //自定义校验
       // console.log(value);
       callback();
     },
-    getCaptcha() {
-      console.log('获取验证码');
-      this.state.smsSendBtn = true;
+    getCaptcha(e) {
+      e.preventDefault();
+      const that = this;
+      this.form.validateFields(['mobile'], { force: true }, (err, values) => {
+        if (!err) {
+          this.state.smsSendBtn = true;
+
+          const interval = window.setInterval(() => {
+            if (that.state.time-- <= 0) {
+              that.state.time = 60;
+              that.state.smsSendBtn = false;
+              window.clearInterval(interval);
+            }
+          }, 1000);
+
+          const hide = this.$message.error(
+            '验证码发送失败,输入任意字符即可',
+            3
+          );
+        }
+      });
     },
     loginSubmit(e) {
       e.preventDefault();
-      this.form.validateFields(async (err, values) => {
-        if (err) return false;
-        this.state.loginBtn = true;
-        console.log('Received values of form: ', values);
+      const validateFieldsKey =
+        this.customActiveKey === 'email'
+          ? ['username', 'password']
+          : ['mobile', 'captcha'];
 
-        //增加命名空间 User/Login
-        try {
-          const result = await this.$store.dispatch('User/Login', values);
-          console.log(result);
-          if (result) {
-            // this.$router.push({ name: 'home', params: { value: 'hahah' } });
-            //   // 或
-            this.$router.push({
-              path: '/',
-              query: { value: 'login success' }
-            });
-          }
-        } catch (error) {
-          console.log(err);
-        } finally {
-          this.state.loginBtn = false;
+      this.form.validateFields(
+        validateFieldsKey,
+        { force: true },
+        (err, values) => {
+          if (err) return false;
+          // console.log(values);
+          values['loginType'] = this.customActiveKey;
+          this.state.loginBtn = true;
+          //增加命名空间 User/Login
+          this.$store.dispatch('User/Login', {
+            values,
+            callback: result => {
+              this.state.loginBtn = false;
+              if (result.status == 1) {
+                this.$notification['success']({
+                  message: result.msg || '登录成功',
+                  description: '2秒后跳转',
+                  duration: 2
+                });
+                setTimeout(() => {
+                  this.$router.push({ name: 'home' });
+                }, 2000);
+              }
+            }
+          });
         }
-        //or
-        // this.$store.dispatch('User/Login', values).then(res => {
-        // this.$router.push({ name: 'home', params: { value: 'hahah' } });
-        //   // 或
-        // this.$router.push({
-        //   path: '/',
-        //   query: { value: 'login success' }
-        // });
-        // })
-        // .catch(err => {
-        //   console.log(err);
-        // })
-        // .finally(() => {
-        //   this.state.loginBtn = false;
-        // });
-        // this.$message.error('账户或密码错误');
-        // this.state.loginBtn = false;
-      });
+      );
     }
   }
 };

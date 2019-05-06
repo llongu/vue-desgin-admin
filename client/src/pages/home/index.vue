@@ -11,14 +11,12 @@ export default {
       msg: ReadMe
     };
   },
-  created() {
-    console.log('created');
-  },
   components: {
     VueMarkdown
   },
   mounted() {
-    console.log(this.$route.query);
+    // console.log(this.$route.query);
+    // console.log(this.$route.params);
   }
 };
 </script>

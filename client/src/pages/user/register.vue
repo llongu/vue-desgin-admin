@@ -122,6 +122,8 @@ const levelColor = {
   2: '#ff7e05',
   3: '#52c41a'
 };
+import { mapActions } from 'vuex';
+
 export default {
   name: 'Register',
   components: {},
@@ -203,27 +205,32 @@ export default {
       callback();
     },
 
+    ...mapActions('User', ['Register']), // 增加命名空间 User/Login
     handleSubmit() {
       this.form.validateFields(async (err, values) => {
-        if (!err) {
-          //增加命名空间 User/Login
-          this.$store.dispatch('User/Register', {
-            values,
-            callback: result => {
-              this.registerBtn = false;
-              if (result.status == 1) {
-                this.$notification['success']({
-                  message: result.msg || '注册成功',
-                  description: '2秒后跳转',
-                  duration: 2
-                });
-                setTimeout(() => {
-                  this.$router.push({ name: 'login' });
-                }, 2000);
-              }
+        if (err) return false;
+        this.registerBtn = true;
+        //vuex 高级写法
+        this.Register({
+          values,
+          callback: result => {
+            this.registerBtn = false;
+            if (result.status == 1) {
+              this.$notification['success']({
+                message: result.msg || '注册成功',
+                description: '2秒后跳转',
+                duration: 2
+              });
+              setTimeout(() => {
+                this.$router.push({ name: 'login' });
+              }, 2000);
             }
-          });
-        }
+          }
+        });
+        // 增加命名空间 User/Login
+        // this.$store.dispatch('User/Register', {
+        //   values,
+        // });
       });
     },
 
@@ -243,7 +250,10 @@ export default {
             }
           }, 1000);
 
-          const hide = this.$message.error('验证码发送失败,请输入1234登录', 3);
+          const hide = this.$message.error(
+            '验证码发送失败,输入任意字符即可',
+            3
+          );
         }
       });
     }

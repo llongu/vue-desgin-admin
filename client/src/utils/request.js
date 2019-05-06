@@ -22,7 +22,7 @@ const service = axios.create({
           notification['warning']({
             message: '警告',
             description: res.msg || '请求出现错误，请稍后再试',
-            duration: 3
+            duration: 2
           });
           break;
         default:

@@ -19,43 +19,32 @@ export default {
   mutations: {
     //直接变更状态 (如果这里使用异步代码会影响vue-devtools调试)
     SET_TOKEN: (state, val) => {
-      console.log(val);
-      state.name = val.username;
+      state.name = val.userName;
+      state.token = val.userToken;
     }
   },
   actions: {
-    Login({ commit }, val) {
-      // axios
-      //   .post(user.login, val)
-      //   .then(res => {
-      //     console.log(res);
-      //   })
-      //   .catch(err => {
-      //     console.log(err);
-      //   });
-      return new Promise((resolve, reject) => {
-        // setTimeout(() => {
-        //   setToken(val);
-        //   commit('SET_TOKEN', val);
-        //   resolve(true);
-        // }, 1000);
-        // login(val)
-        //   .then(res => {
-        //     setToken('tokenval');
-        //     resolve(res);
-        //   })
-        //   .catch(err => {
-        //     reject(err);
-        //   });
-      });
+    async Login({ commit }, { values, callback }) {
+      try {
+        const result = await axios.post(user.login, values);
+        callback(result);
+        if (result.status == 1) {
+          let data = {
+            userName: values.username,
+            userToken: result.data.token
+          };
+          setToken(result.data.token);
+          commit('SET_TOKEN', data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
     },
     async Register({ commit }, { values, callback }) {
-      // console.log(commit, values);
       try {
         const result = await axios.post(user.register, values);
         callback(result);
         if (result.status == 1) {
-          commit('SET_TOKEN', 123);
         }
       } catch (error) {
         console.log(error);

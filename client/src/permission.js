@@ -12,13 +12,12 @@ NProgress.configure({ showSpinner: false }); // NProgress Configuration
 const whiteList = ['login', 'register', 'recover']; // no redirect whitelist
 
 router.beforeEach((to, from, next) => {
-
   // start progress bar
   NProgress.start();
 
   /* has token */
   if (getToken()) {
-    console.warn(to.path);
+    console.warn('跳转至 ==> ', to.path);
     if (to.path === '/user/login') {
       next({ path: '/' });
       NProgress.done();
@@ -58,7 +57,6 @@ router.beforeEach((to, from, next) => {
       // }
     }
   } else {
-
     // 在免登录白名单，直接进入
     if (whiteList.includes(to.name)) {
       next();

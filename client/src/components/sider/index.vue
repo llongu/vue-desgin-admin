@@ -2,7 +2,7 @@
     <a-layout-sider :trigger="null"
                     collapsible
                     breakpoint="lg"
-                    v-model="collapsed">
+                    v-model="activeCollapsed">
 
         <div class="logo" />
 
@@ -10,7 +10,7 @@
                 :defaultOpenKeys="['sub1']"
                 mode="inline"
                 theme="dark"
-                :inlineCollapsed="collapsed">
+                :inlineCollapsed="activeCollapsed">
             <a-menu-item key="1">
                 <router-link id="test"
                              to="/">
@@ -72,13 +72,20 @@ export default {
   props: {
     collapsed: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
-    return {};
+    return {
+      activeCollapsed: this.collapsed
+    };
   },
-  methods: {}
+  methods: {},
+  watch: {
+    collapsed(newVal) {
+      this.activeCollapsed = newVal;
+    }
+  }
 };
 </script>
 
