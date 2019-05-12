@@ -5,15 +5,18 @@ const Schema = mongoose.Schema;
 //定义格式
 const register = new Schema({
   email: {
-    type: String,
-    required: [true, 'Why no email?']
+    type: String
   },
   pwd: {
-    type: String,
-    required: [true, 'Why no pwd?']
+    type: String
+    // required: [true, 'Why no pwd?']
   },
   phone: String,
-  code: String
+  countID: Number,
+  _id: {
+    type: 'Mixed'
+  },
+  token: String
 });
 
 const login = new Schema({

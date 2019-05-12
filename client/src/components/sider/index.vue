@@ -6,8 +6,8 @@
 
         <div class="logo" />
 
-        <a-menu :defaultSelectedKeys="['1']"
-                :defaultOpenKeys="['sub1']"
+        <a-menu :defaultSelectedKeys="activeMenu"
+                :defaultOpenKeys="openMenu"
                 mode="inline"
                 theme="dark"
                 :inlineCollapsed="activeCollapsed">
@@ -25,8 +25,7 @@
                     <span>仪表盘</span>
                 </span>
                 <a-menu-item key="21">
-                    <router-link id="test"
-                                 to="/test">
+                    <router-link to="/adint">
                         <span>图表</span>
                     </router-link>
                 </a-menu-item>
@@ -38,7 +37,7 @@
                 <span>Option 3</span>
             </a-menu-item>
 
-            <a-sub-menu key="sub1">
+            <a-sub-menu key="4">
                 <span slot="title">
                     <a-icon type="mail" />
                     <span>Navigation One</span>
@@ -49,7 +48,7 @@
                 <a-menu-item key="8">Option 8</a-menu-item>
             </a-sub-menu>
 
-            <a-sub-menu key="sub2">
+            <a-sub-menu key="5">
                 <span slot="title">
                     <a-icon type="appstore" />
                     <span>系统管理</span>
@@ -77,7 +76,9 @@ export default {
   },
   data() {
     return {
-      activeCollapsed: this.collapsed
+      activeCollapsed: this.collapsed,
+      activeMenu: ['1'],
+      openMenu: ['2']
     };
   },
   methods: {},

@@ -59,22 +59,21 @@ const constantRouterMap = [
       {
         path: 'home',
         name: 'home',
-        meta: { sider: '介绍', icon: '', title: '首页' },
+        meta: { icon: '', title: '介绍', keepAlive: true },
         component: () => import(/* webpackChunkName: "home" */ '@/pages/home')
       }
     ]
   },
   {
-    path: '/test',
+    path: '/adint',
     component: MainLayout,
-    redirect: '/test',
+    redirect: '/adint/test',
     children: [
       {
         path: 'test',
         name: 'test',
-        meta: { sider: '介绍', icon: '', title: 'test' },
-        component: () =>
-          import(/* webpackChunkName: "home" */ '@/pages/test/test')
+        meta: { icon: '', title: '图表' },
+        component: () => import(/* webpackChunkName: "adint" */ '@/pages/adint')
       }
     ]
   }

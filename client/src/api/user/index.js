@@ -1,4 +1,5 @@
 export const user = {
   login: '/user/login',
-  register: '/user/register'
+  register: '/user/register',
+  msg: '/user/msg'
 };

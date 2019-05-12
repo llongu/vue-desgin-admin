@@ -187,7 +187,6 @@ export default {
           this.$store.dispatch('User/Login', {
             values,
             callback: result => {
-              this.state.loginBtn = false;
               if (result.status == 1) {
                 this.$notification['success']({
                   message: result.msg || '登录成功',
@@ -197,7 +196,10 @@ export default {
                 setTimeout(() => {
                   this.$router.push({ name: 'home' });
                 }, 2000);
+                return;
               }
+
+              this.state.loginBtn = false;
             }
           });
         }

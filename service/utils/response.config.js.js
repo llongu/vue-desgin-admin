@@ -5,8 +5,11 @@ module.exports = function state({
   code = 200,
   status = 1
 }) {
-  //status 1 正常 2 异常
-  ctx.status = code;
+  /*  status 1 正常 2 异常
+      code   401  登录信息失效
+  */
+
+  // ctx.status = code;
   ctx.body = {
     code: code,
     status: status,

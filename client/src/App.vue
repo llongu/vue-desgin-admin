@@ -19,6 +19,8 @@ export default {
   components: {},
   methods: {
     reload() {
+      //child
+      //inject:['reload'] this.reload()
       this.isRouterAlive = false;
       this.$nextTick(function() {
         this.isRouterAlive = true;

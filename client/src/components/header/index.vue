@@ -33,7 +33,8 @@
         <div class="ant-dropdown-link action">
           <a-avatar icon="user"
                     src='' />
-          <span style="margin-left:5px;">这是我的名字</span>
+          <span style="margin-left:5px;"
+                @click="getMsg">{{$store.getters.userName}}</span>
         </div>
         <a-menu slot="overlay">
           <a-menu-item>
@@ -57,7 +58,9 @@
 </template>
 
 <script>
-import { rmToken } from '@/utils/auth';
+import { mapActions } from 'vuex';
+
+import { user } from '@/api/user';
 
 export default {
   props: {
@@ -71,15 +74,33 @@ export default {
       visibleValue: false
     };
   },
+  created() {
+    // console.log(this.$store.getters['User/filtercount']);
+  },
+
   methods: {
+    ...mapActions('User', ['LogOut']),
     collapsedFN() {
       this.$emit('changeCollapsed'); //Parents listen through on('xx',()=>...) or @xxx
     },
     logout() {
-      rmToken();
-      this.$router.push({
-        name: 'login'
+      this.LogOut({
+        callback: result => {
+          this.$notification['success']({
+            message: '退出成功',
+            description: '2秒后跳转',
+            duration: 2
+          });
+          setTimeout(() => {
+            this.$router.push({
+              name: 'login'
+            });
+          }, 2000);
+        }
       });
+    },
+    getMsg() {
+      this.axios.post(user.msg);
     }
   }
 };
