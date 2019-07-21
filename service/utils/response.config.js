@@ -1,4 +1,4 @@
-module.exports = function state({
+module.exports = function Response({
   ctx,
   msg,
   data = {},

@@ -5,7 +5,7 @@ import { constantRouterMap } from './routerMap';
 Vue.use(VueRouter);
 
 const router = new VueRouter({
-  // mode: 'history',
+  mode: 'history',
   routes: constantRouterMap,
   scrollBehavior: () => ({ y: 0 })
 });

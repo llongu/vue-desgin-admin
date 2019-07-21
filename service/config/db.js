@@ -8,9 +8,9 @@ mongoose.connect(
   { useNewUrlParser: true },
   function(err) {
     if (err) {
-      log(chalk.green(`mongodb 连接失败： ${err}`));
+      $log($chalk.green(`mongodb 连接失败： ${err}`));
     } else {
-      log(chalk.green('mongodb 连接成功！'));
+      $log($chalk.green('mongodb 连接成功！'));
     }
   }
 );

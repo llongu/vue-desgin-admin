@@ -24,12 +24,12 @@ describe('测试存储数据是否正常', function() {
           name: 'my name type is string'
         });
         saveMario.save().then(res => {
-          console.log(res);
+          console.$log(res);
           assert(1 + 1 === 3);
         });
       })
       .on('error', function(err) {
-        log(chalk.green(`mongodb 连接失败： ${err}`));
+        $log($chalk.green(`mongodb 连接失败： ${err}`));
       });
   });
 });

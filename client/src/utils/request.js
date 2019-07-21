@@ -88,6 +88,7 @@ const err = error => {
 
 // request interceptor
 service.interceptors.request.use(config => {
+  console.log(config);
   config.headers['Content-Type'] = 'application/json'; // json
   if (getToken()) {
     config.headers['Access-Token'] = getToken(); // 让每个请求携带自定义 token 请根据实际情况自行修改

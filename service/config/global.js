@@ -1,6 +1,6 @@
 const chalk = require('chalk');
-global.chalk = chalk;
-global.log = console.log;
+global.$chalk = chalk;
+global.$log = console.log;
 
-const state = require('../utils/response.config.js');
-global.$state = state;
+const response = require('../utils/response.config.js');
+global.$res = response;

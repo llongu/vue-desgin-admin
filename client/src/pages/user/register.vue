@@ -105,27 +105,27 @@
 
  <script>
 const levelNames = {
-  0: '低',
-  1: '低',
-  2: '中',
-  3: '强'
+  0: "低",
+  1: "低",
+  2: "中",
+  3: "强"
 };
 const levelClass = {
-  0: 'error',
-  1: 'error',
-  2: 'warning',
-  3: 'success'
+  0: "error",
+  1: "error",
+  2: "warning",
+  3: "success"
 };
 const levelColor = {
-  0: '#ff0000',
-  1: '#ff0000',
-  2: '#ff7e05',
-  3: '#52c41a'
+  0: "#ff0000",
+  1: "#ff0000",
+  2: "#ff7e05",
+  3: "#52c41a"
 };
-import { mapActions } from 'vuex';
+import { mapActions } from "vuex";
 
 export default {
-  name: 'Register',
+  name: "Register",
   components: {},
   data() {
     return {
@@ -137,7 +137,7 @@ export default {
         passwordLevel: 0,
         passwordLevelChecked: false,
         percent: 10,
-        progressColor: '#FF0000'
+        progressColor: "#FF0000"
       },
       registerBtn: false
     };
@@ -181,18 +181,18 @@ export default {
         if (level === 0) {
           this.state.percent = 10;
         }
-        callback(new Error('密码强度不够'));
+        callback(new Error("密码强度不够"));
       }
     },
 
     handlePasswordCheck(rule, value, callback) {
-      const password = this.form.getFieldValue('password');
+      const password = this.form.getFieldValue("password");
       // console.log('value', value);
       if (value === undefined) {
-        callback(new Error('请输入密码'));
+        callback(new Error("请输入密码"));
       }
       if (value && password && value.trim() !== password.trim()) {
-        callback(new Error('两次密码不一致'));
+        callback(new Error("两次密码不一致"));
       }
       callback();
     },
@@ -205,7 +205,7 @@ export default {
       callback();
     },
 
-    ...mapActions('User', ['Register']), // 增加命名空间 User/Login
+    ...mapActions("User", ["Register"]), // 增加命名空间 User/Login
     handleSubmit() {
       this.form.validateFields(async (err, values) => {
         if (err) return false;
@@ -216,13 +216,13 @@ export default {
           callback: result => {
             this.registerBtn = false;
             if (result.status == 1) {
-              this.$notification['success']({
-                message: result.msg || '注册成功',
-                description: '2秒后跳转',
+              this.$notification["success"]({
+                message: result.msg || "注册成功",
+                description: "2秒后跳转",
                 duration: 2
               });
               setTimeout(() => {
-                this.$router.push({ name: 'login' });
+                this.$router.push({ name: "login" });
               }, 2000);
             }
           }
@@ -238,7 +238,7 @@ export default {
       e.preventDefault();
       const that = this;
 
-      this.form.validateFields(['mobile'], { force: true }, (err, values) => {
+      this.form.validateFields(["mobile"], { force: true }, (err, values) => {
         if (!err) {
           this.state.smsSendBtn = true;
 
@@ -251,7 +251,7 @@ export default {
           }, 1000);
 
           const hide = this.$message.error(
-            '验证码发送失败,输入任意字符即可',
+            "验证码发送失败,输入任意字符即可",
             3
           );
         }
@@ -259,7 +259,7 @@ export default {
     }
   },
   watch: {
-    'state.passwordLevel'(val) {
+    "state.passwordLevel"(val) {
       // alert(val);
     }
   }

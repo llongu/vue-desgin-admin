@@ -120,12 +120,12 @@
 
 <script>
 export default {
-  name: 'login',
+  name: "login",
 
   data() {
     return {
       form: this.$form.createForm(this),
-      customActiveKey: 'email',
+      customActiveKey: "email",
       loginBtn: false,
       loginType: 0,
       state: {
@@ -149,7 +149,7 @@ export default {
     getCaptcha(e) {
       e.preventDefault();
       const that = this;
-      this.form.validateFields(['mobile'], { force: true }, (err, values) => {
+      this.form.validateFields(["mobile"], { force: true }, (err, values) => {
         if (!err) {
           this.state.smsSendBtn = true;
 
@@ -162,7 +162,7 @@ export default {
           }, 1000);
 
           const hide = this.$message.error(
-            '验证码发送失败,输入任意字符即可',
+            "验证码发送失败,输入任意字符即可",
             3
           );
         }
@@ -171,9 +171,9 @@ export default {
     loginSubmit(e) {
       e.preventDefault();
       const validateFieldsKey =
-        this.customActiveKey === 'email'
-          ? ['username', 'password']
-          : ['mobile', 'captcha'];
+        this.customActiveKey === "email"
+          ? ["username", "password"]
+          : ["mobile", "captcha"];
 
       this.form.validateFields(
         validateFieldsKey,
@@ -181,20 +181,20 @@ export default {
         (err, values) => {
           if (err) return false;
           // console.log(values);
-          values['loginType'] = this.customActiveKey;
+          values["loginType"] = this.customActiveKey;
           this.state.loginBtn = true;
           //增加命名空间 User/Login
-          this.$store.dispatch('User/Login', {
+          this.$store.dispatch("User/Login", {
             values,
             callback: result => {
               if (result.status == 1) {
-                this.$notification['success']({
-                  message: result.msg || '登录成功',
-                  description: '2秒后跳转',
+                this.$notification["success"]({
+                  message: result.msg || "登录成功",
+                  description: "2秒后跳转",
                   duration: 2
                 });
                 setTimeout(() => {
-                  this.$router.push({ name: 'home' });
+                  this.$router.push({ name: "home" });
                 }, 2000);
                 return;
               }

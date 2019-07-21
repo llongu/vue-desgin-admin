@@ -6,6 +6,24 @@ module.exports = app => {
   const static = require('koa-static');
   const logger = require('koa-logger');
   const path = require('path');
+  const log4js = require('log4js');
+  const request = require('../utils/request.config');
+
+  log4js.configure({
+    appenders: {
+      cheese: {
+        type: 'file',
+        filename: './logs/server.log'
+      }
+    },
+    categories: {
+      default: {
+        appenders: ['cheese'],
+        level: 'error'
+      }
+    }
+  });
+  const logger4 = log4js.getLogger('cheese');
 
   // error handler
   onerror(app);
@@ -24,4 +42,15 @@ module.exports = app => {
       extension: 'pug'
     })
   );
+  app.use(request);
+  //log4js
+  app.use(async (ctx, next) => {
+    try {
+      await next();
+    } catch (error) {
+      logger4.error(error);
+      $log($chalk.red('错误 => logger4,' + error));
+      // ctx.body = '错误';
+    }
+  });
 };

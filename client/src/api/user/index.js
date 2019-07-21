@@ -1,5 +1,5 @@
 export const user = {
-  login: '/user/login',
-  register: '/user/register',
-  msg: '/user/msg'
+  login: 'api/user/login',
+  register: 'api/user/register',
+  msg: 'api/user/msg'
 };
