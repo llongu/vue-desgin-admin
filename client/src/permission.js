@@ -9,9 +9,11 @@ import { getToken } from '@/utils/auth';
 
 NProgress.configure({ showSpinner: false }); // NProgress Configuration
 
-const whiteList = ['login', 'register', 'recover']; // no redirect whitelist
+// const whiteList = ['login', 'register', 'recover']; // no redirect whitelist
+const whiteList = ['login', 'register', 'recover', 'home', 'test']; // no server
 
 router.beforeEach((to, from, next) => {
+
   // start progress bar
   NProgress.start();
 
@@ -57,6 +59,7 @@ router.beforeEach((to, from, next) => {
       // }
     }
   } else {
+
     // 在免登录白名单，直接进入
     if (whiteList.includes(to.name)) {
       next();
